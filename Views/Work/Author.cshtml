@@ -1,0 +1,94 @@
+﻿@model IEnumerable<MvcBlogAdmin.Models.Author>
+@{
+    ViewData["Title"] = "Author";
+}
+<button type="button" onclick="AuthorModal.show()" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AuthorModal">Yazar Ekle</button>
+
+<table class="table table-striped table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Name</th>
+      <th scope="col">Surname</th>
+      <th scope="col">Email</th>
+      <th scope="col">Password</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+      @foreach(var item in Model)
+      {
+          <tr>
+            <th scope="row">@item.Id</th>
+            <td>@item.Name</td>
+            <td>@item.Surname</td>
+            <td>@item.Email</td>
+            <td>*****</td>
+            <td><a type="button" class="btn btn-danger" asp-route-id=@item.Id asp-action="DeleteAuthor">Sil</a>
+            <button class="btn btn-secondary" onclick="UpdateForm(@item.Id)">Düzenle</button</td>
+          </tr>
+      }
+  </tbody>
+</table>
+
+
+<div class="modal" id="AuthorModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Yazar Yönetimi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="/Log/AddAuthor" autocopmlete="off">
+                <div class="modal-body">
+                    <div class="form-group mb-2">
+                        <input type="hidden" name="Id" id="Id" class="form-control"></input>
+                        <input type="text" name="Name" id="Name" class="form-control" placeholder="Name" ></input>
+                    </div>
+                    <div class="form-group mb-2">
+                        <input type="text" name="Surname" id="Surname" class="form-control" placeholder="Surname" ></input>
+                    </div>
+                    <div class="form-group mb-2">
+                        <input type="text" name="Email" id="Email" class="form-control" placeholder="Email" ></input>
+                    </div>
+                    <div class="form-group mb-2">
+                        <input type="password" name="Password" id="Password" class="form-control" placeholder="Password" ></input>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="ClearForm()" data-bs-dismiss="modal">Kapat</button>
+                    <button type="submit" class="btn btn-primary" id="saveBtn">Ekle</button>
+                    <button type="submit" class="btn btn-primary" id="updateBtn">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(()=>ClearForm())
+        function UpdateForm(Id){
+            fetch('/Log/AuthorDetails?Id='+Id)
+            .then(res => res.json())
+            .then(res =>{
+                $('#Id').val(res.id)
+                $('#Name').val(res.name)
+                $('#Surname').val(res.surname)
+                $('#Email').val(res.email)
+                $('#Password').val(res.password)
+            })
+            $('#saveBtn').hide();
+            $('#updateBtn').show();
+            $('#AuthorModal').modal('show');
+        }
+        function ClearForm(){
+            $('#Id').val(null)
+            $('#Name').val(null)
+            $('#Surname').val(null)
+            $('#Email').val(null)
+            $('#Password').val(null)
+            $('#saveBtn').show();
+            $('#updateBtn').hide();
+        }
+    </script>
+}

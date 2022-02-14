@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row mt-5 ml-5">
+    <div class="col-md-6">
+        <form method="POST" action="/Home/Login" autocomplete="off">
+            <div class="form-group mb-2">
+                <input type="text" class="form-control" name="Email" placeholder="Email">
+            </div>
+            <div class="form-group mb-2">
+                <input type="password" class="form-control" name="Password" placeholder="Password">
+            </div>
+            <button type="submit" class="btn btn-secondary">Giriş</button>
+        </form>
+    </div>
+</div>
